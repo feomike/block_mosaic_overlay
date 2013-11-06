@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# mosaic_export_overlay.py
+# mosaic_export.py
 # Created on: May 24, 2011 
 # Created by: Michael Byrne
 # Federal Communications Commission
