@@ -21,13 +21,13 @@ theFC = "/mosaic_all"
 
 theBlockGDB = "C:/Users/michael.byrne/Library/TabBlock_2010.gdb/"
 
-States = ["CO","CT"]   #"AK","AL",       #1"AR","AZ","CA",
-States = States + ["DC","DE","FL","GA","HI","IA","ID"] #2
+States = ["AK","AL","AR","AS","AZ","CA","CO","CT"]          #1
+States = States + ["DC","DE","FL","GA","GU","HI","IA","ID"] #2
 States = States + ["IL","IN","KS","KY","LA","MA","MD","ME"] #3 
-States = States + ["MI","MN","MO","MS","NC","ND"] #4 ,"MT"
+States = States + ["MI","MN","MO","MP","MS","MT","NC","ND"] #4 
 States = States + ["NE","NH","NJ","NM","NV","NY","OH","OK"] #5
-States = States + ["OR","PA","RI","SC","SD","TN","TX"] #6
-States = States + ["UT","VA","VT","WA","WI","WV","WY"] #7
+States = States + ["OR","PA","PR","RI","SC","SD","TN","TX"] #6
+States = States + ["UT","VA","VI","VT","WA","WI","WV","WY"] #7
 States = ["AS"]
 
 theOutPrj = "PROJCS['North_America_Albers_Equal_Area_Conic',GEOGCS['GCS_North_American_1983',DATUM['D_North_American_1983',SPHEROID['GRS_1980',6378137.0,298.257222101]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]],PROJECTION['Albers'],PARAMETER['False_Easting',0.0],PARAMETER['False_Northing',0.0],PARAMETER['Central_Meridian',-96.0],PARAMETER['Standard_Parallel_1',20.0],PARAMETER['Standard_Parallel_2',60.0],PARAMETER['Latitude_Of_Origin',40.0],UNIT['Meter',1.0]]"
