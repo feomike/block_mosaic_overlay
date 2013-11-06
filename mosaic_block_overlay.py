@@ -13,10 +13,12 @@ import sys, string, os, math
 
 
 #write out global variables
-thePGDB = "C:/Users/michael.byrne/mosaic/processing.gdb"  #processing file geodatabase
+theDir = "C:/Users/michael.byrne/analysis/2013/mosaic/oct/"
+thePGDB = theDir + "processing.gdb"  #processing file geodatabase
 arcpy.env.workspace = thePGDB
 
-theLocation = "C:/Users/michael.byrne/mosaic/"
+theFC = "/mosaic_all"
+
 theBlockGDB = "C:/Users/michael.byrne/Library/TabBlock_2010.gdb/"
 
 States = ["CO","CT"]   #"AK","AL",       #1"AR","AZ","CA",
@@ -26,7 +28,7 @@ States = States + ["MI","MN","MO","MS","NC","ND"] #4 ,"MT"
 States = States + ["NE","NH","NJ","NM","NV","NY","OH","OK"] #5
 States = States + ["OR","PA","RI","SC","SD","TN","TX"] #6
 States = States + ["UT","VA","VT","WA","WI","WV","WY"] #7
-#States = ["AS","GU","MP","PR","VI"]
+States = ["AS"]
 
 theOutPrj = "PROJCS['North_America_Albers_Equal_Area_Conic',GEOGCS['GCS_North_American_1983',DATUM['D_North_American_1983',SPHEROID['GRS_1980',6378137.0,298.257222101]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]],PROJECTION['Albers'],PARAMETER['False_Easting',0.0],PARAMETER['False_Northing',0.0],PARAMETER['Central_Meridian',-96.0],PARAMETER['Standard_Parallel_1',20.0],PARAMETER['Standard_Parallel_2',60.0],PARAMETER['Latitude_Of_Origin',40.0],UNIT['Meter',1.0]]"
 theInPrj = "GEOGCS['GCS_WGS_1984',DATUM['D_WGS_1984',SPHEROID['WGS_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]]"
@@ -37,7 +39,6 @@ theTransform = "NAD_1983_To_WGS_1984_1"
 ##Function sbdd_ExportToShape exports the created layers to shapefiles in
 ##appropriate directories
 def blockIntersect():
-    theFC = "/mosaic_lte"
     arcpy.AddMessage("     Begining overlay Processing")
     if arcpy.Exists("wireless_block_" + theST):
         arcpy.Delete_management("wireless_block_" + theST)
@@ -69,27 +70,28 @@ def blockIntersect():
             if int(theSelCnt) > 0:  #there ARE records in the intersect
                 arcpy.AddMessage("          performing intersect...")
                 #perform the intersection on both feature classes
-                arcpy.Intersect_analysis([thePGDB + theFC, theBlock], theOFC)  
+                arcpy.Intersect_analysis([thePGDB + theFC, theBlock], theOFC)                  
                 arcpy.Project_management(theOFC, theOFCP, theOutPrj, 
-                                         theTransform, theInPrj)
+                                         theTransform, theInPrj)                
                 arcpy.AddField_management(theOFCP, "PCT" ,"DOUBLE", 
-                                          "5" , "2", "")
-                theExp = "([SHAPE_Area]) /( [ALAND10] + [AWATER10] )*100"
+                                          "5" , "2", "")                
+                theExp = "([SHAPE_Area]) /( [ALAND10] + [AWATER10] )*100"                
                 arcpy.CalculateField_management(theOFCP, "PCT", 
                                                 theExp, "VB", "")
                 if arcpy.Exists(theOFC):
                     arcpy.Delete_management(theOFC)
                 myQry = "PCT > 100"
-                myLyrC = theST + "gtOne" + str(myID)
+                myLyrC = theST + "gtOne" + str(myID)                
                 arcpy.MakeFeatureLayer_management (theOFCP, myLyrC, myQry)
-                if int(arcpy.GetCount_management(myLyr).getOutput(0)) > 0:
-                    arcpy.CalculateField_management(myLyr, "PCT", "100", 
-                                                    "PYTHON", "")
-                arcpy.Delete_management(myLyrC)
+                if int(arcpy.GetCount_management(myLyrC).getOutput(0)) > 0:                    
+                    arcpy.CalculateField_management(myLyrC, "PCT", "100", 
+                                                    "PYTHON", "")                    
+                arcpy.Delete_management(myLyrC)                
                 arcpy.CopyRows_management(theOFCP, theOFC)
                 if arcpy.Exists(theOFCP):
                     arcpy.Delete_management(theOFCP)
                 del theExp
+                
             del theOFC, theOFCP, myFC, myFCs
         myID = myID + 1    
     del myLyr, myQry, theBlock, theCnt, myID
@@ -103,7 +105,7 @@ try:
         arcpy.AddMessage("the state is: " + theST)
         blockIntersect()
         #open a file to write when it finished
-        outFile = "C:/users/michael.byrne/mosaic/wireless_overlay_" + theST + ".txt"
+        outFile = theDir + "/wireless_overlay_" + theST + ".txt"
         myFile = open(outFile, 'w')
         myFile.write(theST + ": finished\n")
         myFile.close()
